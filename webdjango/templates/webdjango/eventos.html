@@ -1,0 +1,75 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Eventos | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Próximos Eventos</h2>
+    <!-- Evento 1 con Thom Yorke -->
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{% static 'webdjango/imagenes/tom2.jpg' %}" class="img-fluid rounded-start" alt="Thom Yorke">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">Concierto de Thom Yorke</h3>
+                    <p class="card-text">Fecha: 15 de mayo, 2024</p>
+                    <p class="card-text">Lugar: Estadio Nacional</p>
+                    <p class="card-text">Hora: 20:00</p>
+                    <a href="{% url 'biografias' %}#thom_yorke" class="btn btn-primary">Ver Biografía</a>
+                    <!-- Formulario para comprar entradas -->
+                    {% if user.is_authenticated %}
+                    <form onsubmit="addToCart('Thom Yorke', document.getElementById('num-entradas-thom').value); return false;">
+                        <div class="mb-3">
+                            <label for="num-entradas-thom" class="form-label">Número de entradas:</label>
+                            <input type="number" class="form-control" id="num-entradas-thom" name="quantity" min="1" value="1">
+                        </div>
+                        <button type="submit" class="btn btn-success">Comprar Entradas</button>
+                    </form>
+                    {% else %}
+                    <p>Para comprar entradas, por favor <a href="{% url 'login' %}">inicia sesión</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Evento 2 con Jeff Buckley -->
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{% static 'webdjango/imagenes/jeff-buckley.jpg' %}" class="img-fluid rounded-start" alt="Jeff Buckley">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">Concierto de Jeff Buckley</h3>
+                    <p class="card-text">Fecha: 20 de junio, 2024</p>
+                    <p class="card-text">Lugar: Teatro Metropolitano</p>
+                    <p class="card-text">Hora: 19:30</p>
+                    <a href="{% url 'biografias' %}" class="btn btn-primary">Ver Biografía</a>
+                    <!-- Formulario para comprar entradas -->
+                    {% if user.is_authenticated %}
+                    <form onsubmit="addToCart('Jeff Buckley', document.getElementById('num-entradas-jeff').value); return false;">
+                        <div class="mb-3">
+                            <label for="num-entradas-jeff" class="form-label">Número de entradas:</label>
+                            <input type="number" class="form-control" id="num-entradas-jeff" name="quantity" min="1" value="1">
+                        </div>
+                        <button type="submit" class="btn btn-success">Comprar Entradas</button>
+                    </form>
+                    {% else %}
+                    <p>Para comprar entradas, por favor <a href="{% url 'login' %}">inicia sesión</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Nueva Sección para Otros Conciertos -->
+    <div id="otros-conciertos" class="mt-5">
+        <h3 class="text-center mb-4">Otros Conciertos que Podrían Interesarte</h3>
+        <div class="row" id="conciertos-recomendados">
+            <!-- Los conciertos recomendados se insertarán aquí -->
+        </div>
+    </div>
+</div>
+{% endblock %}

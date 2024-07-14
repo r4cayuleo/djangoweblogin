@@ -1,0 +1,78 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Contáctanos | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Contáctanos</h2>
+    <form id="form">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="celular" class="form-label">Celular</label>
+            <input type="text" class="form-control" name="celular" id="celular" required minlength="9">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="pais" class="form-label">País</label>
+            <input type="text" class="form-control" name="pais" id="pais">
+        </div>
+        <div class="mb-3">
+            <label for="ciudad" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" name="ciudad" id="ciudad">
+        </div>
+        <div class="mb-3">
+            <label for="consulta" class="form-label">Consulta</label>
+            <textarea class="form-control" name="consulta" id="consulta" required></textarea>
+        </div>
+        <input type="submit" class="btn btn-success" id="button" value="Enviar Mensaje">
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- EmailJS -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+    (function(){
+        emailjs.init("-q_6C77OJjT86IlZ1");
+    })();
+</script>
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+  emailjs.init('-q_6C77OJjT86IlZ1')
+</script>
+
+<script>
+    const btn = document.getElementById('button');
+
+document.getElementById('form')
+ .addEventListener('submit', function(event) {
+   event.preventDefault();
+
+   btn.value = 'Sending...';
+
+   const serviceID = 'default_service';
+   const templateID = 'template_4svg4xn';
+
+   emailjs.sendForm(serviceID, templateID, this)
+    .then(() => {
+      btn.value = 'Send Email';
+      alert('Sent!');
+    }, (err) => {
+      btn.value = 'Send Email';
+      alert(JSON.stringify(err));
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Artistas | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">Artistas</h2>
+    <div id="artistCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'webdjango/imagenes/tom2.jpg' %}" alt="Thom Yorke en una presentación en vivo">
+                <div class="carousel-caption">
+                    <h3>Thom Yorke</h3>
+                    <p>Edad: 54 años</p>
+                    <p>Thom Yorke es el vocalista principal de Radiohead, reconocido por su distintivo estilo vocal y letras emotivas. Nacido el 7 de octubre de 1968 en Wellingborough, Northamptonshire, Inglaterra, Yorke ha sido una figura influyente en la música contemporánea, tanto con Radiohead como en su carrera en solitario.</p>
+                    <p>Álbumes destacados: 'The Bends', 'OK Computer', 'In Rainbows'</p>
+                    <a href="{% url 'biografias' %}#thom_yorke" class="btn btn-primary">Ver Biografía</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'webdjango/imagenes/jeff-buckley.jpg' %}" alt="Jeff Buckley tocando la guitarra">
+                <div class="carousel-caption">
+                    <h3>Jeff Buckley</h3>
+                    <p>Edad: Fallecido a los 30 años (1966-1997)</p>
+                    <p>Jeff Buckley fue un cantante y compositor estadounidense, conocido por su voz poderosa y emotiva. Nacido el 17 de noviembre de 1966 en Anaheim, California, y falleció trágicamente el 29 de mayo de 1997. Es más conocido por su versión de "Hallelujah" y su álbum 'Grace'.</p>
+                    <a href="{% url 'biografias' %}#jeff_buckley" class="btn btn-primary">Ver Biografía</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'webdjango/imagenes/adele.jpg' %}" alt="Adele en una presentación en vivo">
+                <div class="carousel-caption">
+                    <h3>Adele</h3>
+                    <p>Edad: 33 años</p>
+                    <p>Adele Laurie Blue Adkins, conocida profesionalmente como Adele, es una cantante y compositora británica. Nacida el 5 de mayo de 1988 en Tottenham, Londres, es conocida por su poderosa voz y emotivas baladas.</p>
+                    <p>Álbumes destacados: '19', '21', '25'</p>
+                    <a href="{% url 'biografias' %}#adele" class="btn btn-primary">Ver Biografía</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'webdjango/imagenes/coming_soon.jpg' %}" alt="Próximamente">
+                <div class="carousel-caption">
+                    <h3>Más artistas</h3>
+                    <p>Próximamente...</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#artistCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#artistCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+</div>
+
+{% endblock %}

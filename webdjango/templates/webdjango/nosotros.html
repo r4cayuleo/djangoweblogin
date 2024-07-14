@@ -1,0 +1,24 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Nosotros | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Sobre Nosotros</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <img src="{% static 'webdjango/imagenes/vinyl_logo.png' %}" alt="Logo" class="img-fluid my-4" style="max-height: 200px;">
+            <p>Bienvenido a nuestro Proyecto Web de Música. Somos un equipo apasionado por la música y dedicados a proporcionar la mejor experiencia de biografías de artistas y venta de entradas.</p>
+            <h2>Nuestra Misión</h2>
+            <p>Nuestra misión es conectar a los fans con sus artistas favoritos y facilitar el acceso a información y eventos de manera sencilla y efectiva. Queremos ser el punto de referencia para todos los amantes de la música, ofreciendo contenido detallado y actualizaciones constantes.</p>
+            <h2>El Equipo</h2>
+            <p>Contamos con un equipo multidisciplinario de profesionales de la música, el diseño y la tecnología, todos comprometidos en brindar la mejor experiencia posible a nuestros usuarios. Cada miembro del equipo aporta su propia pasión y experiencia para hacer de este proyecto una realidad.</p>
+            <h2>Nuestra Web</h2>
+            <p>En nuestra web, encontrarás biografías detalladas de tus artistas favoritos, información sobre sus discografías y próximos conciertos. Además, ofrecemos un servicio de venta de entradas para que puedas asistir a los eventos más esperados. Nuestro objetivo es ser la plataforma definitiva para los amantes de la música, brindándoles todas las herramientas necesarias para estar al día con las últimas noticias y eventos del mundo musical.</p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

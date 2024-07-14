@@ -1,0 +1,24 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Perfil | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Perfil de Usuario</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Información del Usuario
+                </div>
+                <div class="card-body">
+                    <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <!-- Agrega más información del perfil aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
