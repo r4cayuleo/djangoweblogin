@@ -1,6 +1,4 @@
 // VALIDACIONES PARA FORMULARIO DE REGISTRO
-
-// VALIDACIONES PARA FORMULARIO DE REGISTRO
 document.getElementById('registro-form').addEventListener('submit', function(event) {
     // Obtener valores de los campos
     var nombre = document.getElementById('id_nombre').value.trim();
@@ -13,14 +11,10 @@ document.getElementById('registro-form').addEventListener('submit', function(eve
     var edad = document.getElementById('id_edad').value;
 
     // Borrar mensajes de error anteriores
-    document.getElementById('error-nombre').textContent = '';
-    document.getElementById('error-apellido').textContent = '';
-    document.getElementById('error-usuario').textContent = '';
-    document.getElementById('error-correo').textContent = '';
-    document.getElementById('error-contraseña').textContent = '';
-    document.getElementById('error-rep-contraseña').textContent = '';
-    document.getElementById('error-sexo').textContent = '';
-    document.getElementById('error-edad').textContent = '';
+    var campos = ['nombre', 'apellido', 'usuario', 'correo', 'contraseña', 'rep_contraseña', 'sexo', 'edad'];
+    campos.forEach(function(campo) {
+        document.getElementById('error-' + campo).textContent = '';
+    });
 
     // Validaciones
     var valid = true;
@@ -104,22 +98,21 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     }
 });
 
-
-
 // AQUI EMPIEZA EL CODIGO DEL CARRITO DE COMPRAS
 document.addEventListener('DOMContentLoaded', function() {
+    cargarConciertosRecomendados();
     updateCartCount();
     renderCartItems();
 });
 
-function addToCart(eventName, quantity) {
+function addToCart(eventName, quantity, price) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const eventIndex = cart.findIndex(event => event.name === eventName);
 
     if (eventIndex > -1) {
         cart[eventIndex].quantity += parseInt(quantity);
     } else {
-        cart.push({ name: eventName, quantity: parseInt(quantity) });
+        cart.push({ name: eventName, quantity: parseInt(quantity), price: price });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -132,6 +125,13 @@ function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const count = cart.reduce((total, event) => total + event.quantity, 0);
     document.getElementById('cart-count').textContent = count;
+    updateCartTotal();
+}
+
+function updateCartTotal() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const total = cart.reduce((sum, event) => sum + (event.quantity * event.price), 0);
+    document.getElementById('cart-total').textContent = total.toFixed(2);
 }
 
 function renderCartItems() {
@@ -144,7 +144,7 @@ function renderCartItems() {
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
 
         const eventInfo = document.createElement('span');
-        eventInfo.textContent = `${event.name} - `;
+        eventInfo.textContent = `${event.name} - $${event.price} x `;
 
         const quantityInput = document.createElement('input');
         quantityInput.type = 'number';
@@ -170,11 +170,12 @@ function renderCartItems() {
     });
 }
 
-function updateCartQuantity(index, quantity) {
+function updateCartQuantity(index, newQuantity) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart[index].quantity = parseInt(quantity);
+    cart[index].quantity = parseInt(newQuantity);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
+    renderCartItems();
 }
 
 function removeFromCart(index) {
@@ -204,10 +205,8 @@ function finalizarCompra() {
     }
 }
 
-
-
 // CODIGO API
-const TICKETMASTER_API_KEY = 'CGGZDZbd2Du3f5HVuhZ2UrWhqmdzaBCc'; // Cambio de nombre para evitar conflictos
+const TICKETMASTER_API_KEY = 'CGGZDZbd2Du3f5HVuhZ2UrWhqmdzaBCc';
 const ticketmasterUrl = `https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&apikey=${TICKETMASTER_API_KEY}`;
 
 function cargarConciertosRecomendados() {
@@ -223,201 +222,33 @@ function cargarConciertosRecomendados() {
 
             eventos.forEach(evento => {
                 const artista = evento._embedded.attractions[0].name;
-                const fechaEvento = new Date(evento.dates.start.localDate);
-                const añoEvento = fechaEvento.getFullYear();
-
-                if (añoEvento !== 2024 && añoEvento !== 2025) {
-                    return;
-                }
-
-                if (!displayedArtists.includes(artista) && displayedArtists.length >= 4) {
-                    return;
-                }
+                const fechaEvento = new Date(evento.dates.start.dateTime);
 
                 if (!artistCounts[artista]) {
                     artistCounts[artista] = 0;
                 }
 
-                if (artistCounts[artista] < 3) {
-                    const conciertoElement = document.createElement('div');
-                    conciertoElement.classList.add('col-md-4');
+                if (artistCounts[artista] < 2 && !displayedArtists.includes(artista)) {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
 
-                    conciertoElement.innerHTML = `
-                        <div class="card">
-                            <img src="${evento.images[0].url}" class="card-img-top" alt="${evento.name}">
+                    card.innerHTML = `
+                        <div class="card h-100">
+                            <img src="${evento.images[0].url}" class="card-img-top" alt="${artista}">
                             <div class="card-body">
-                                <h5 class="card-title">${evento.name}</h5>
-                                <p class="card-text">Fecha: ${evento.dates.start.localDate}</p>
-                                <p class="card-text">Lugar: ${evento._embedded.venues[0].name}</p>
-                                <a href="${evento.url}" class="btn btn-primary">Comprar Entradas</a>
+                                <h5 class="card-title">${artista}</h5>
+                                <p class="card-text">${evento.name}</p>
+                                <p class="card-text"><strong>Fecha:</strong> ${fechaEvento.toLocaleDateString()} ${fechaEvento.toLocaleTimeString()}</p>
+                                <button class="btn btn-primary" onclick="addToCart('${evento.name}', 1)">Agregar al carrito</button>
                             </div>
                         </div>
                     `;
 
-                    conciertosContainer.appendChild(conciertoElement);
-
+                    conciertosContainer.appendChild(card);
+                    displayedArtists.push(artista);
                     artistCounts[artista]++;
-                    if (!displayedArtists.includes(artista)) {
-                        displayedArtists.push(artista);
-                    }
                 }
             });
         })
-        .catch(error => {
-            console.error('Error al cargar los conciertos:', error);
-        });
+        .catch(error => console.error('Error al cargar conciertos recomendados:', error));
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    cargarConciertosRecomendados();
-});
-
-
-// AQUI EMPIEZA EL CODIGO DE LA API
-// Clave API de Ticketmaster
-const apiKey = 'CGGZDZbd2Du3f5HVuhZ2UrWhqmdzaBCc';
-// URL de la API de Ticketmaster para obtener eventos de música
-const url = `https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&apikey=${apiKey}`;
-
-// Función para obtener y mostrar los conciertos recomendados
-function cargarConciertosRecomendados() {
-    // Llamada a la API usando fetch
-    fetch(url)
-        .then(response => response.json()) // Convierte la respuesta en un objeto JSON
-        .then(data => {
-            // Se obtiene la lista de eventos del objeto JSON
-            const eventos = data._embedded.events;
-            // Se selecciona el contenedor para mostrar los conciertos recomendados
-            const conciertosContainer = document.getElementById('conciertos-recomendados');
-            // Limpia cualquier contenido anterior en el contenedor
-            conciertosContainer.innerHTML = '';
-
-            // Objeto para contar la cantidad de conciertos por artista
-            const artistCounts = {};
-            // Array para rastrear el número de artistas diferentes mostrados
-            const displayedArtists = [];
-
-            // Itera sobre cada evento
-            eventos.forEach(evento => {
-                // Nombre del artista principal del evento
-                const artista = evento._embedded.attractions[0].name;
-
-                // Fecha del evento
-                const fechaEvento = new Date(evento.dates.start.localDate);
-                const añoEvento = fechaEvento.getFullYear();
-
-                // Filtra eventos para mostrar solo los de 2024 y 2025
-                if (añoEvento !== 2024 && añoEvento !== 2025) {
-                    return;
-                }
-                
-                // Si el artista no está en el array y ya hay 4 artistas, no agregue más conciertos
-                if (!displayedArtists.includes(artista) && displayedArtists.length >= 4) {
-                    return;
-                }
-
-                // Inicializa el contador para el artista si no existe
-                if (!artistCounts[artista]) {
-                    artistCounts[artista] = 0;
-                }
-
-                // Solo agrega el concierto si el artista tiene menos de 3 conciertos mostrados
-                if (artistCounts[artista] < 3) {
-                    // Crea un elemento de tarjeta para el concierto
-                    const conciertoElement = document.createElement('div');
-                    conciertoElement.classList.add('col-md-4');
-
-                    // Define el contenido HTML de la tarjeta
-                    conciertoElement.innerHTML = `
-                        <div class="card">
-                            <img src="${evento.images[0].url}" class="card-img-top" alt="${evento.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${evento.name}</h5>
-                                <p class="card-text">Fecha: ${evento.dates.start.localDate}</p>
-                                <p class="card-text">Lugar: ${evento._embedded.venues[0].name}</p>
-                                <a href="${evento.url}" class="btn btn-primary" target="_blank">Comprar Entradas</a>
-                            </div>
-                        </div>
-                    `;
-
-                    // Agrega la tarjeta al contenedor
-                    conciertosContainer.appendChild(conciertoElement);
-                    // Incrementa el contador para el artista
-                    artistCounts[artista]++;
-                    
-                    // Si es la primera vez que se muestra un concierto de este artista, se agrega al array de artistas mostrados
-                    if (!displayedArtists.includes(artista)) {
-                        displayedArtists.push(artista);
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Error:', error)); // Maneja cualquier error en la llamada a la API
-}
-
-// Función para cargar los conciertos cuando se cargue la página
-document.addEventListener('DOMContentLoaded', cargarConciertosRecomendados);
-
-// AUTENTICACION LOGIN
-// app.js
-
-document.addEventListener('DOMContentLoaded', function() {
-    const authLinks = document.getElementById('auth-links');
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-    if (authLinks && loggedInUser) {
-        authLinks.innerHTML = `
-            <li class="nav-item">
-                <a href="perfil.html" class="nav-link">Ver Perfil</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" id="logout">Cerrar Sesión</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">
-                    <i class="fas fa-shopping-cart"></i> Carrito (<span id="cart-count">0</span>)
-                </a>
-            </li>
-        `;
-        
-        document.getElementById('logout').addEventListener('click', function() {
-            localStorage.removeItem('loggedInUser');
-            window.location.href = 'index.html';
-        });
-    }
-});
-
-
-// Este evento se activa cuando el DOM está completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
-    // Se obtiene el elemento que contiene los enlaces de autenticación
-    const authLinks = document.getElementById('auth-links');
-    // Se obtiene la información del usuario que ha iniciado sesión desde el almacenamiento local
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-    // Si hay un usuario autenticado
-    if (loggedInUser) {
-        // Se reemplazan los enlaces de autenticación con los enlaces de perfil y cierre de sesión
-        authLinks.innerHTML = `
-            <li class="nav-item">
-                <a href="perfil.html" class="nav-link">Ver Perfil</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" id="logout">Cerrar Sesión</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">
-                    <i class="fas fa-shopping-cart"></i> Carrito (<span id="cart-count">0</span>)
-                </a>
-            </li>
-        `;
-        
-        // Se agrega un evento de escucha al enlace de cierre de sesión
-        document.getElementById('logout').addEventListener('click', function() {
-            // Se elimina la información del usuario autenticado del almacenamiento local
-            localStorage.removeItem('loggedInUser');
-            // Se redirige al usuario a la página de inicio
-            window.location.href = 'index.html';
-        });
-    }
-});
