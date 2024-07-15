@@ -3,17 +3,20 @@ document.getElementById('registro-form').addEventListener('submit', function(eve
     // Obtener valores de los campos
     var nombre = document.getElementById('id_nombre').value.trim();
     var apellido = document.getElementById('id_apellido').value.trim();
-    var usuario = document.getElementById('id_usuario').value.trim();
-    var correo = document.getElementById('id_correo').value.trim();
-    var contraseña = document.getElementById('id_contraseña').value;
-    var repContraseña = document.getElementById('id_rep_contraseña').value;
+    var usuario = document.getElementById('id_username').value.trim();
+    var correo = document.getElementById('id_email').value.trim();
+    var contraseña = document.getElementById('id_password1').value;
+    var repContraseña = document.getElementById('id_password2').value;
     var sexo = document.getElementById('id_sexo').value;
     var edad = document.getElementById('id_edad').value;
 
     // Borrar mensajes de error anteriores
-    var campos = ['nombre', 'apellido', 'usuario', 'correo', 'contraseña', 'rep_contraseña', 'sexo', 'edad'];
+    var campos = ['nombre', 'apellido', 'username', 'correo', 'contraseña', 'rep_contraseña', 'sexo', 'edad'];
     campos.forEach(function(campo) {
-        document.getElementById('error-' + campo).textContent = '';
+        var errorElement = document.getElementById('error-' + campo);
+        if (errorElement) {
+            errorElement.textContent = '';
+        }
     });
 
     // Validaciones
@@ -28,7 +31,7 @@ document.getElementById('registro-form').addEventListener('submit', function(eve
         valid = false;
     }
     if (usuario === '') {
-        document.getElementById('error-usuario').textContent = 'El campo Usuario es obligatorio';
+        document.getElementById('error-username').textContent = 'El campo Usuario es obligatorio';
         valid = false;
     }
     if (correo === '') {
@@ -58,12 +61,8 @@ document.getElementById('registro-form').addEventListener('submit', function(eve
         valid = false;
     }
 
-    if (valid) {
-        alert('Registro exitoso. Redirigiendo a la página de inicio de sesión.');
-        window.location.href = 'login.html';
-    } else {
-        alert('Error en el registro. Por favor, revise los campos.');
-        event.preventDefault();
+    if (!valid) {
+        event.preventDefault(); // Evita que el formulario se envíe si hay errores
     }
 });
 
@@ -72,6 +71,58 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarConciertosRecomendados();
     updateCartCount();
     renderCartItems();
+});
+
+// ACTUALIZACIÓN DE PERFIL
+document.getElementById('update-profile-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Previene el envío del formulario
+    
+    // Obtener valores de los campos
+    var username = document.getElementById('id_username').value.trim();
+    var email = document.getElementById('id_email').value.trim();
+    
+    // Borrar mensajes de error anteriores
+    document.getElementById('error-username').textContent = '';
+    document.getElementById('error-email').textContent = '';
+    
+    // Validaciones
+    var valid = true;
+
+    if (username === '') {
+        document.getElementById('error-username').textContent = 'El campo Nombre de usuario es obligatorio';
+        valid = false;
+    }
+    if (email === '') {
+        document.getElementById('error-email').textContent = 'El campo Email es obligatorio';
+        valid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+        document.getElementById('error-email').textContent = 'El campo Email no es válido';
+        valid = false;
+    }
+
+    if (valid) {
+        // Enviar datos al servidor
+        var csrftoken = getCookie('csrftoken');
+        
+        fetch('/ruta/a/tu/api/de/actualizacion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({ username: username, email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Perfil actualizado con éxito');
+                // Actualizar los valores en el perfil (opcional)
+            } else {
+                alert('Hubo un problema al actualizar el perfil. Por favor, intenta de nuevo.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 });
 
 function addToCart(eventName, quantity, price) {
@@ -262,7 +313,7 @@ function cargarConciertosRecomendados() {
                                 <h5 class="card-title">${artista}</h5>
                                 <p class="card-text">${evento.name}</p>
                                 <p class="card-text"><strong>Fecha:</strong> ${fechaEvento.toLocaleDateString()} ${fechaEvento.toLocaleTimeString()}</p>
-                                <button class="btn btn-primary" onclick="addToCart('${evento.name}', 1)">Agregar al carrito</button>
+                                <button class="btn btn-primary" onclick="addToCart('${evento.name}', 1, ${evento.priceRanges[0].min})">Agregar al carrito</button>
                             </div>
                         </div>
                     `;

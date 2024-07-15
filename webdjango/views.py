@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+from .forms import RegistroForm
 
 def inicio(request):
     return render(request, 'webdjango/inicio.html')
@@ -24,19 +24,15 @@ def contactanos(request):
 def nosotros(request):
     return render(request, 'webdjango/nosotros.html')
 
-
 def registro(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistroForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
+            user = form.save()
             login(request, user)
             return redirect('inicio')
     else:
-        form = UserCreationForm()
+        form = RegistroForm()
     return render(request, 'registration/registro.html', {'form': form})
 
 def login_view(request):
@@ -58,7 +54,6 @@ def logout_view(request):
     if request.method in ['POST', 'GET']:
         logout(request)
         return redirect('login') 
-    
+
 def datos_compra(request):
     return render(request, 'webdjango/datos_compra.html')
-
