@@ -245,12 +245,15 @@ function checkout() {
             localStorage.removeItem('cart');
             updateCartCount();
             renderCartItems();
+            // Redirigir al archivo datos_compra.html
+            window.location.href = 'ruta/a/datos_compra.html';
         } else {
             alert('Hubo un problema con la compra. Por favor, intenta de nuevo.');
         }
     })
     .catch(error => console.error('Error:', error));
 }
+
 
 function getCookie(name) {
     let cookieValue = null;

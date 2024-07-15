@@ -13,6 +13,6 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('perfil/', views.perfil, name='perfil'), 
-    path('datos_compra/', views.datos_compra, name='datos_compra'),
+   path('datos_compra/', views.datos_compra, name='datos_compra'),
     # Agrega otras rutas necesarias
 ]
