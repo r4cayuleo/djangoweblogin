@@ -68,37 +68,6 @@ document.getElementById('registro-form').addEventListener('submit', function(eve
 });
 
 // AUTENTICACIÓN LOGIN
-document.getElementById('login-form').addEventListener('submit', function(event) {
-    var username = document.getElementById('id_username').value.trim();
-    var password = document.getElementById('id_password').value.trim();
-
-    // Borrar mensajes de error anteriores
-    document.getElementById('error-username').textContent = '';
-    document.getElementById('error-password').textContent = '';
-
-    // Validaciones
-    var valid = true;
-
-    if (username === '') {
-        document.getElementById('error-username').textContent = 'El campo Usuario es obligatorio';
-        valid = false;
-    }
-    if (password === '') {
-        document.getElementById('error-password').textContent = 'El campo Contraseña es obligatorio';
-        valid = false;
-    }
-
-    if (valid) {
-        // Simulación de autenticación exitosa
-        alert('Sesión iniciada correctamente.');
-        window.location.href = 'eventos.html';
-    } else {
-        alert('Error en el inicio de sesión. Por favor, revise los campos.');
-        event.preventDefault();
-    }
-});
-
-// AQUI EMPIEZA EL CODIGO DEL CARRITO DE COMPRAS
 document.addEventListener('DOMContentLoaded', function() {
     cargarConciertosRecomendados();
     updateCartCount();
@@ -112,7 +81,7 @@ function addToCart(eventName, quantity, price) {
     if (eventIndex > -1) {
         cart[eventIndex].quantity += parseInt(quantity);
     } else {
-        cart.push({ name: eventName, quantity: parseInt(quantity), price: price });
+        cart.push({ name: eventName, quantity: parseInt(quantity), price: parseFloat(price) });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -131,7 +100,14 @@ function updateCartCount() {
 function updateCartTotal() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const total = cart.reduce((sum, event) => sum + (event.quantity * event.price), 0);
-    document.getElementById('cart-total').textContent = total.toFixed(2);
+    document.getElementById('cart-total').textContent = formatCurrency(total);
+}
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP'
+    }).format(value);
 }
 
 function renderCartItems() {
@@ -144,7 +120,7 @@ function renderCartItems() {
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
 
         const eventInfo = document.createElement('span');
-        eventInfo.textContent = `${event.name} - $${event.price} x `;
+        eventInfo.textContent = `${event.name} - ${formatCurrency(event.price)} x `;
 
         const quantityInput = document.createElement('input');
         quantityInput.type = 'number';
@@ -168,11 +144,18 @@ function renderCartItems() {
 
         cartItemsContainer.appendChild(listItem);
     });
+
+    updateCartTotal();
 }
 
 function updateCartQuantity(index, newQuantity) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart[index].quantity = parseInt(newQuantity);
+    if (newQuantity <= 0) {
+        cart.splice(index, 1);
+    } else {
+        cart[index].quantity = parseInt(newQuantity);
+    }
+
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
     renderCartItems();
@@ -187,10 +170,50 @@ function removeFromCart(index) {
 }
 
 function checkout() {
-    localStorage.removeItem('cart');
-    updateCartCount();
-    renderCartItems();
-    window.location.href = datosCompraUrl; // Redirigir usando la URL definida en el HTML
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cart.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    fetch(datosCompraUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(cart)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Compra realizada con éxito');
+            localStorage.removeItem('cart');
+            updateCartCount();
+            renderCartItems();
+        } else {
+            alert('Hubo un problema con la compra. Por favor, intenta de nuevo.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 function finalizarCompra() {

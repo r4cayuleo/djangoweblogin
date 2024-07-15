@@ -18,11 +18,11 @@
                     <p class="card-text">Fecha: 15 de mayo, 2024</p>
                     <p class="card-text">Lugar: Estadio Nacional</p>
                     <p class="card-text">Hora: 20:00</p>
-                    <p class="card-text">Precio: $50</p> <!-- Agregar precio -->
+                    <p class="card-text">Precio: 45,000 CLP</p> 
                     <a href="{% url 'biografias' %}#thom_yorke" class="btn btn-primary">Ver Biografía</a>
                     <!-- Formulario para comprar entradas -->
                     {% if user.is_authenticated %}
-                    <form onsubmit="addToCart('Thom Yorke', document.getElementById('num-entradas-thom').value, 50); return false;"> <!-- Pasar precio -->
+                    <form onsubmit="addToCart('Thom Yorke', document.getElementById('num-entradas-thom').value, 45000); return false;"> <!-- Precio corregido -->
                         <div class="mb-3">
                             <label for="num-entradas-thom" class="form-label">Número de entradas:</label>
                             <input type="number" class="form-control" id="num-entradas-thom" name="quantity" min="1" value="1">
@@ -48,11 +48,11 @@
                     <p class="card-text">Fecha: 20 de junio, 2024</p>
                     <p class="card-text">Lugar: Teatro Metropolitano</p>
                     <p class="card-text">Hora: 19:30</p>
-                    <p class="card-text">Precio: $40</p> <!-- Agregar precio -->
+                    <p class="card-text">Precio: 40,000 CLP</p> 
                     <a href="{% url 'biografias' %}" class="btn btn-primary">Ver Biografía</a>
                     <!-- Formulario para comprar entradas -->
                     {% if user.is_authenticated %}
-                    <form onsubmit="addToCart('Jeff Buckley', document.getElementById('num-entradas-jeff').value, 40); return false;"> <!-- Pasar precio -->
+                    <form onsubmit="addToCart('Jeff Buckley', document.getElementById('num-entradas-jeff').value, 40000); return false;"> <!-- Precio corregido -->
                         <div class="mb-3">
                             <label for="num-entradas-jeff" class="form-label">Número de entradas:</label>
                             <input type="number" class="form-control" id="num-entradas-jeff" name="quantity" min="1" value="1">
@@ -70,7 +70,7 @@
     <div id="otros-conciertos" class="mt-5">
         <h3 class="text-center mb-4">Otros Conciertos que Podrían Interesarte</h3>
         <div class="row" id="conciertos-recomendados">
-            <!-- Los conciertos recomendados se insertarán aquí -->
+            <!-- Los conciertos recomendados se cargaran aquí -->
         </div>
     </div>
 </div>
