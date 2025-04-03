@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Biografia
 from .forms import RegistroForm, BiografiaForm
 
+# INICIO: se muestran las biografías destacadas
 def inicio(request):
     biografias = Biografia.objects.all()
     return render(request, 'webdjango/inicio.html', {'biografias': biografias})
@@ -16,9 +17,24 @@ def eventos(request):
 def artistas(request):
     return render(request, 'webdjango/artistas.html')
 
+# VISTA CON FILTROS DE BUSQUEDA
 def biografias(request):
+    query = request.GET.get('q')
+    genero = request.GET.get('genero')
+
     biografias = Biografia.objects.all()
-    return render(request, 'webdjango/biografias.html', {'biografias': biografias})
+
+    if query:
+        biografias = biografias.filter(nombre__icontains=query)
+
+    if genero:
+        biografias = biografias.filter(descripcion__icontains=genero)
+
+    return render(request, 'webdjango/biografias.html', {
+        'biografias': biografias,
+        'query': query,
+        'genero': genero,
+    })
 
 def contactanos(request):
     return render(request, 'webdjango/contactanos.html')
@@ -60,6 +76,7 @@ def logout_view(request):
 def datos_compra(request):
     return render(request, 'webdjango/datos_compra.html')
 
+# PANEL ADMIN: LISTAR, AGREGAR, EDITAR Y ELIMINAR
 @login_required
 def listar_biografias(request):
     biografias = Biografia.objects.all()
@@ -74,19 +91,31 @@ def agregar_biografia(request):
             return redirect('listar_biografias')
     else:
         form = BiografiaForm()
-    return render(request, 'webdjango/form_biografia.html', {'form': form, 'titulo': 'Agregar Biografía'})
+    return render(request, 'webdjango/form_biografia.html', {
+        'form': form,
+        'titulo': 'Agregar Biografía'
+    })
 
 @login_required
 def editar_biografia(request, pk):
     biografia = get_object_or_404(Biografia, pk=pk)
+    
     if request.method == 'POST':
         form = BiografiaForm(request.POST, request.FILES, instance=biografia)
+
+        # Si marcaron "eliminar imagen", borramos el archivo
+        if request.POST.get('eliminar_imagen') and biografia.imagen:
+            biografia.imagen.delete(save=False)
+            biografia.imagen = None
+
         if form.is_valid():
             form.save()
             return redirect('listar_biografias')
     else:
         form = BiografiaForm(instance=biografia)
+    
     return render(request, 'webdjango/form_biografia.html', {'form': form, 'titulo': 'Editar Biografía'})
+
 
 @login_required
 def eliminar_biografia(request, pk):
