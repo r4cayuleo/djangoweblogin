@@ -32,7 +32,7 @@
 </div>
 
 <!-- Sección de Artistas Destacados -->
-<div id="seccion-artistas" class="container section">
+<div id="seccion-artistas" class="container section mt-5">
     <h2 class="section-heading">Artistas Destacados</h2>
     <div class="row">
         <div class="col-md-4">
@@ -41,9 +41,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Thom Yorke</h5>
                     <p class="card-text">Género: Rock Alternativo</p>
-                    <p class="card-text">Álbumes con Radiohead: "OK Computer", "Kid A", "In Rainbows"</p>
-                    <p class="card-text">Álbumes como solista: "The Eraser", "Anima"</p>
-                    <a href="biografias.html#thom_yorke" class="btn btn-primary">Ver Biografía</a>
+                    <p class="card-text">Radiohead: "OK Computer", "Kid A"</p>
+                    <a href="{% url 'biografias' %}#thom_yorke" class="btn btn-primary">Ver Biografía</a>
                 </div>
             </div>
         </div>
@@ -53,9 +52,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Jeff Buckley</h5>
                     <p class="card-text">Género: Rock Alternativo</p>
-                    <p class="card-text">Álbumes: "Grace", "Sketches for My Sweetheart the Drunk"</p>
-                    <p class="card-text">Canción más famosa: "Hallelujah"</p>
-                    <a href="biografias.html#jeff_buckley" class="btn btn-primary">Ver Biografía</a>
+                    <p class="card-text">Álbumes: "Grace", "Sketches..."</p>
+                    <a href="{% url 'biografias' %}#jeff_buckley" class="btn btn-primary">Ver Biografía</a>
                 </div>
             </div>
         </div>
@@ -65,9 +63,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Adele</h5>
                     <p class="card-text">Género: Pop, Soul</p>
-                    <p class="card-text">Álbumes: "19", "21", "25"</p>
-                    <p class="card-text">Canción más famosa: "Someone Like You"</p>
-                    <a href="biografias.html#adele" class="btn btn-primary">Ver Biografía</a>
+                    <p class="card-text">Álbumes: "19", "21", "25", "30"</p>
+                    <a href="{% url 'biografias' %}#adele" class="btn btn-primary">Ver Biografía</a>
                 </div>
             </div>
         </div>
@@ -75,8 +72,8 @@
 </div>
 
 <!-- Sección de Eventos -->
-<div id="seccion-eventos" class="container section">
-    <h2 class="section-heading">Eventos</h2>    
+<div id="seccion-eventos" class="container section mt-5">
+    <h2 class="section-heading">Eventos</h2>
     <div class="row">
         <div class="col-md-6">
             <div class="card mb-3">
@@ -87,10 +84,9 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h3 class="card-title">Concierto en Vivo</h3>
-                            <p class="card-text">Fecha: 10 de mayo, 2024</p>
-                            <p class="card-text">Lugar: Teatro Municipal</p>
-                            <p class="card-text">Hora: 19:00</p>
-                            <p class="card-text">Descripción: Disfruta de una noche de música en vivo con artistas locales e invitados especiales.</p>
+                            <p class="card-text">10 de mayo, 2024</p>
+                            <p class="card-text">Teatro Municipal - 19:00</p>
+                            <p class="card-text">Artistas locales e invitados especiales.</p>
                         </div>
                     </div>
                 </div>
@@ -105,10 +101,9 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h3 class="card-title">Festival de Música</h3>
-                            <p class="card-text">Fecha: 25 de junio, 2024</p>
-                            <p class="card-text">Lugar: Parque Central</p>
-                            <p class="card-text">Hora: 16:00</p>
-                            <p class="card-text">Descripción: Únete a nosotros para celebrar la diversidad musical en nuestro festival anual.</p>
+                            <p class="card-text">25 de junio, 2024</p>
+                            <p class="card-text">Parque Central - 16:00</p>
+                            <p class="card-text">Celebrando la diversidad musical en nuestro festival anual.</p>
                         </div>
                     </div>
                 </div>
@@ -116,6 +111,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}
