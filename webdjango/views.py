@@ -6,7 +6,8 @@ from .models import Biografia
 from .forms import RegistroForm, BiografiaForm
 
 def inicio(request):
-    return render(request, 'webdjango/inicio.html')
+    biografias = Biografia.objects.all()
+    return render(request, 'webdjango/inicio.html', {'biografias': biografias})
 
 @login_required
 def eventos(request):
