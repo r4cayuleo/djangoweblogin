@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Biografia
 from .forms import RegistroForm, BiografiaForm
+=======
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from .forms import RegistroForm
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
 
 def inicio(request):
     return render(request, 'webdjango/inicio.html')
@@ -15,10 +24,15 @@ def eventos(request):
 def artistas(request):
     return render(request, 'webdjango/artistas.html')
 
+<<<<<<< HEAD
 # 🔄 AHORA carga las biografías dinámicamente
 def biografias(request):
     biografias = Biografia.objects.all()
     return render(request, 'webdjango/biografias.html', {'biografias': biografias})
+=======
+def biografias(request):
+    return render(request, 'webdjango/biografias.html')
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
 
 def contactanos(request):
     return render(request, 'webdjango/contactanos.html')
@@ -58,6 +72,7 @@ def logout_view(request):
         return redirect('login') 
 
 def datos_compra(request):
+<<<<<<< HEAD
     return render(request, 'webdjango/datos_compra.html')
 
 @login_required
@@ -93,3 +108,6 @@ def eliminar_biografia(request, pk):
     biografia = get_object_or_404(Biografia, pk=pk)
     biografia.delete()
     return redirect('listar_biografias')
+=======
+    return render(request, 'webdjango/datos_compra.html')
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0

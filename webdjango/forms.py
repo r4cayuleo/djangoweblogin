@@ -1,7 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+<<<<<<< HEAD
 from .models import PerfilUsuario, Biografia
+=======
+from .models import PerfilUsuario
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
 
 class RegistroForm(UserCreationForm):
     nombre = forms.CharField(max_length=100, required=True, help_text='Requerido')
@@ -15,7 +19,11 @@ class RegistroForm(UserCreationForm):
         fields = ('username', 'nombre', 'apellido', 'correo', 'password1', 'password2', 'sexo', 'edad')
 
     def save(self, commit=True):
+<<<<<<< HEAD
         user = super().save(commit=False)
+=======
+        user = super(RegistroForm, self).save(commit=False)
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
         user.email = self.cleaned_data['correo']
         if commit:
             user.save()
@@ -27,9 +35,13 @@ class RegistroForm(UserCreationForm):
                 edad=self.cleaned_data['edad']
             )
             perfil.save()
+<<<<<<< HEAD
         return user
 
 class BiografiaForm(forms.ModelForm):
     class Meta:
         model = Biografia
         fields = ['nombre', 'imagen', 'descripcion', 'discografia', 'premios']
+=======
+        return user
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0

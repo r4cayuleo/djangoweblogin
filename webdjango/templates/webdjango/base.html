@@ -49,11 +49,15 @@
                 <li class="nav-item">
                     <a href="{% url 'nosotros' %}" class="nav-link">Nosotros</a>
                 </li>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{% url 'perfil' %}" class="nav-link">Ver Perfil</a>
                     </li>
+<<<<<<< HEAD
                     <li class="nav-item">
                         <a href="{% url 'listar_biografias' %}" class="nav-link">Panel Admin</a>
                     </li>
@@ -61,11 +65,21 @@
                         <form method="post" action="{% url 'logout' %}" id="logout-form">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link nav-link" style="border: none; background: none; padding: 0;">
+=======
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" id="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link" style="border: none; background: none; padding: 0;">
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
                                 Cerrar Sesión
                             </button>
                         </form>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD
+=======
+                        <!-- Este enlace muestra el ícono del carrito de compras y el número de elementos en el carrito -->
+>>>>>>> 4e772b9f58dcd6228b9abb5ec2fee1bc5080ece0
                         <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">
                             <i class="fas fa-shopping-cart"></i> Carrito (<span id="cart-count">0</span>)
                         </a>
