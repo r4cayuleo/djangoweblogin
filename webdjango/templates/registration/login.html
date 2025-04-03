@@ -1,0 +1,29 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Login | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Iniciar Sesión</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" id="login-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="id_username" name="username" required>
+                    <div class="text-danger" id="error-username"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="id_password" name="password" required>
+                    <div class="text-danger" id="error-password"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'webdjango/js/app.js' %}"></script>
+{% endblock %}

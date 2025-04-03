@@ -1,0 +1,40 @@
+{% extends 'webdjango/base.html' %}
+{% load static %}
+
+{% block title %}Panel de Biografías{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Panel de Biografías</h2>
+
+    <div class="text-end mb-3">
+        <a href="{% url 'agregar_biografia' %}" class="btn btn-success">Agregar Biografía</a>
+    </div>
+
+    {% if biografias %}
+        <div class="row">
+            {% for bio in biografias %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if bio.imagen %}
+                        <img src="{{ bio.imagen.url }}" class="card-img-top" alt="{{ bio.nombre }}">
+                    {% else %}
+                        <img src="{% static 'webdjango/imagenes/coming_soon.jpg' %}" class="card-img-top" alt="Sin imagen">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bio.nombre }}</h5>
+                        <p class="card-text">{{ bio.descripcion|truncatewords:20 }}</p>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="{% url 'editar_biografia' bio.id %}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{% url 'eliminar_biografia' bio.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">No hay biografías registradas aún.</div>
+    {% endif %}
+</div>
+{% endblock %}

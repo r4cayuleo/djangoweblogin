@@ -1,0 +1,30 @@
+{% extends 'webdjango/base.html' %}
+
+{% block title %}Datos de Compra{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Datos de Compra</h2>
+    <form id="purchase-form">
+        <!-- Campos del formulario para ingresar los datos de compra básicos -->
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="correo" required>
+        </div>
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccion" required>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" required>
+        </div>
+        <!-- Otros campos -->
+        <button type="button" class="btn btn-success" onclick="finalizarCompra()" data-url="{% url 'inicio' %}">Finalizar Compra</button>
+    </form>
+</div>
+{% endblock %}

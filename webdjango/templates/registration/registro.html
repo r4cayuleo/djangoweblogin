@@ -1,0 +1,64 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Registro | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Registro</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" id="registro-form" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Nombre de usuario</label>
+                            {{ form.username|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese un nombre de usuario.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_nombre" class="form-label">Nombre</label>
+                            {{ form.nombre|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese su nombre.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_apellido" class="form-label">Apellido</label>
+                            {{ form.apellido|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese su apellido.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_correo" class="form-label">Correo Electrónico</label>
+                            {{ form.correo|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese un correo electrónico válido.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">Contraseña</label>
+                            {{ form.password1|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese una contraseña.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">Confirmar Contraseña</label>
+                            {{ form.password2|add_class:"form-control" }}
+                            <div class="invalid-feedback">Las contraseñas deben coincidir.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_sexo" class="form-label">Sexo</label>
+                            {{ form.sexo|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, seleccione su sexo.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_edad" class="form-label">Edad</label>
+                            {{ form.edad|add_class:"form-control" }}
+                            <div class="invalid-feedback">Por favor, ingrese su edad.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'webdjango/js/app.js' %}"></script>
+{% endblock %}

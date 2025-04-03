@@ -1,0 +1,69 @@
+{% extends "webdjango/base.html" %}
+{% load static %}
+
+{% block title %}Contáctanos | Proyecto Web de Música{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Contáctanos</h2>
+    <form id="form">
+        <div class="field">
+          <label for="nombre">nombre</label>
+          <input type="text" name="nombre" id="nombre">
+        </div>
+        <div class="field">
+          <label for="celular">celular</label>
+          <input type="text" name="celular" id="celular">
+        </div>
+        <div class="field">
+          <label for="email">email</label>
+          <input type="text" name="email" id="email">
+        </div>
+        <div class="field">
+          <label for="pais">pais</label>
+          <input type="text" name="pais" id="pais">
+        </div>
+        <div class="field">
+          <label for="ciudad">ciudad</label>
+          <input type="text" name="ciudad" id="ciudad">
+        </div>
+        <div class="field">
+          <label for="consulta">consulta</label>
+          <input type="text" name="consulta" id="consulta">
+        </div>
+        <input type="submit" id="button" value="Send Email" >
+      </form>
+</div>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+const btn = document.getElementById('button');
+
+document.getElementById('form')
+ .addEventListener('submit', function(event) {
+   event.preventDefault();
+
+   btn.value = 'Sending...';
+
+   const serviceID = 'dservice_a6rzdfx';
+   const templateID = 'template_4svg4xn';
+
+   emailjs.sendForm(serviceID, templateID, this)
+    .then(() => {
+      btn.value = 'Send Email';
+      alert('Sent!');
+    }, (err) => {
+      btn.value = 'Send Email';
+      alert(JSON.stringify(err));
+    });
+});
+
+<script type="text/javascript"
+src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+emailjs.init('-q_6C77OJjT86IlZ1')
+</script>
+{% endblock %}
